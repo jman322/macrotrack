@@ -1,11 +1,11 @@
 import csv
-
+import os
 
 def addmacro(mealcalories, mealprotein):
-    with open('data/meals.csv', mode='w') as csvfile:
+    with open('data/meals.csv', mode='a', newline='') as csvfile:
         fieldnames = ['Date', 'Breakfast Calories','Breakfast Protein','Lunch Calories','Lunch Protien','Dinner Calories','Dinner Protien','Snack Calories','Snack Protien','Total Caloriees', 'Total Protien']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()                
+              
         while True:
             Calories = input('Enter Calories: ')
             try:
@@ -20,10 +20,11 @@ def addmacro(mealcalories, mealprotein):
                 break
             except ValueError:
                 print("Please input a valid number for Protein.")
-                
-        print('writing')
 
-        writer.writerow({f'{mealcalories}': {Calories}, f'{mealprotein}': {Protein}})
+        
+        writer.writerow({f'{mealcalories}': Calories, f'{mealprotein}': Protein})
+
+    return
 
 
 
@@ -31,7 +32,7 @@ def addmeal():
 
 
 
-        print('Which meal Would You like to add?')
+        print('\nWhich meal Would You like to add?\n')
         print('Enter 1 for Breakfast')
         print('Enter 2 for Lunch')
         print('Enter 3 for Dinner')
@@ -43,7 +44,8 @@ def addmeal():
         while choice != "5":
             if choice == "1":
                 addmacro('Breakfast Calories', 'Breakfast Protein')
-                pass
+                os.system('cls||clear')
+                addmeal()
             if choice == "2":
                 pass
             if choice == "3":
