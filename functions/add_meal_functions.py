@@ -10,24 +10,44 @@ import pandas as pd
 
 
 def addmacro(mealcalories, mealprotein):
-    with open('data/meals.csv', mode='a', newline='') as csvfile:
-        fieldnames = ['Date', 'Breakfast Calories','Breakfast Protein','Lunch Calories','Lunch Protein','Dinner Calories','Dinner Protein','Snack Calories','Snack Protein','Total Caloriees', 'Total Protein']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-              
-        while True:
-            Calories = input('Enter Calories: ')
-            try:
-                int_value = int(Calories)
-                break
-            except ValueError:
-                print("Please input a valid number for Calories.")
-        while True:
-            Protein = input('Enter Protein: ')
-            try:
-                int_value = int(Protein)
-                break
-            except ValueError:
-                print("Please input a valid number for Protein.")
+
+    fieldnames = ['Date', 'Breakfast Calories','Breakfast Protein','Lunch Calories','Lunch Protein','Dinner Calories','Dinner Protein','Snack Calories','Snack Protein','Total Caloriees', 'Total Protein']
+    file_path = 'data/meals.csv'
+
+    if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
+        # If the file doesn't exist or is empty, write the header
+        with open(file_path, mode='w', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+    else:
+        # File exists, let's check the existing fieldnames
+        with open(file_path, mode='r', newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            existing_fieldnames = next(reader, None)  # Read the first line (header)
+
+        # Only write the header if it doesn't match the current fieldnames
+        if existing_fieldnames != fieldnames:
+            with open(file_path, mode='w', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+
+
+
+
+    while True:
+        Calories = input('Enter Calories: ')
+        try:
+            int_value = int(Calories)
+            break
+        except ValueError:
+            print("Please input a valid number for Calories.")
+    while True:
+        Protein = input('Enter Protein: ')
+        try:
+            int_value = int(Protein)
+            break
+        except ValueError:
+            print("Please input a valid number for Protein.")
 
 
 

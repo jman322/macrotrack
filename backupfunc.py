@@ -1,5 +1,6 @@
 import csv
 import os
+from colored import Fore, Back, Style
 
 def addmacro(mealcalories, mealprotein):
     with open('data/meals.csv', mode='a', newline='') as csvfile:
