@@ -33,10 +33,39 @@ def addmacro(mealcalories, mealprotein):
     todays_date = datetime.now().strftime('%Y-%m-%d')
     if todays_date in df['Date'].values:
         row_index = df.index[df['Date'] == todays_date].tolist()[0]
-        df.at[row_index, mealcalories] = Calories
-        df.at[row_index, mealprotein] = Protein
 
+        if df.at[row_index, mealcalories] != None:
+            print(f'{mealcalories} is already input. Would you like to update?')
+            print('Enter 1 for Yes')
+            print('Enter 2 for No')
+
+            userinput = input("Enter your choice: ")
+
+            if userinput == '1':
+                df.at[row_index, mealcalories] = int(Calories)
+            elif userinput == '2':
+                df.at[row_index, mealcalories] = int(df.at[row_index, mealcalories])
+            else:
+                print('Invalid Input')
+
+        if df.at[row_index, mealprotein] != None:
+            print(f'{mealprotein} is already input. Would you like to update?')
+            print('Enter 1 for Yes')
+            print('Enter 2 for No')
+
+            userinput = input("Enter your choice: ")
+
+            if userinput == '1':
+                df.at[row_index, mealprotein] = int(Protein)
+            elif userinput == '2':
+                df.at[row_index, mealprotein] = int(df.at[row_index, mealprotein])
+            else:
+                print('Invalid Input')
+
+        df[mealcalories] = df[mealcalories].fillna(0).astype(int)
+        df[mealprotein] = df[mealprotein].fillna(0).astype(int)
         df.to_csv('data/meals.csv', index=False)
+
 
             
 
