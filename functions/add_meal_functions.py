@@ -4,10 +4,27 @@ from colored import Fore, Back, Style
 from datetime import datetime
 from time import sleep
 import pandas as pd
+import numpy as np
 
+def create_menu():
+    os.system('cls||clear')
+    print("Enter 1 to Add Meal")
+    print("Enter 2 to Delete Meal")
+    print("Enter 3 to List Meal History")
+    print("Enter 4 to Calculate Target Calories")
+    print("Enter 5 to Calculate Target Protien")
+    print("Enter 6 to View Progress")
+    print('Enter 7 to Save and Exit\n')
+
+
+    choice = input("Enter your choice: ")
+
+    print(choice)
+
+    return choice
 
 def filecheck():
-    fieldnames = ['Date', 'Breakfast Calories','Breakfast Protein','Lunch Calories','Lunch Protein','Dinner Calories','Dinner Protein','Snack Calories','Snack Protein','Total Caloriees', 'Total Protein']
+    fieldnames = ['Date', 'Breakfast Calories','Breakfast Protein','Lunch Calories','Lunch Protein','Dinner Calories','Dinner Protein','Snack Calories','Snack Protein','Total Calories', 'Total Protein']
     file_path = 'data/meals.csv'
 
     if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
@@ -26,6 +43,7 @@ def filecheck():
             with open(file_path, mode='w', newline='') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
+
 
 
 def addmacro(mealcalories, mealprotein):
@@ -105,6 +123,11 @@ def addmacro(mealcalories, mealprotein):
         df = df._append(new_row, ignore_index=True)
 
 
+    df['Total Calories'] = (df['Breakfast Calories'].fillna(0) + df['Lunch Calories'].fillna(0) + df['Dinner Calories'].fillna(0) + df['Snack Calories'].fillna(0))
+    df['Total Calories'] = df['Total Calories'].fillna(0).astype(int)
+
+    df['Total Protein'] = (df['Breakfast Protein'].fillna(0) + df['Lunch Protein'].fillna(0) + df['Dinner Protein'].fillna(0) + df['Snack Protein'].fillna(0))
+    df['Total Protein']  = df['Total Protein'].fillna(0).astype(int)
 
     #Ensure all edited fields are int and not float
     df[mealcalories] = df[mealcalories].fillna(0).astype(int)
@@ -113,7 +136,100 @@ def addmacro(mealcalories, mealprotein):
     df.to_csv('data/meals.csv', index=False)
     return
 
+def addsnack(mealcalories, mealprotein):
 
+    
+    filecheck()
+
+
+
+    while True:
+        Calories = input('Enter Calories: ')
+        try:
+            int_value = int(Calories)
+            break
+        except ValueError:
+            print("Please input a valid number for Calories.")
+    while True:
+        Protein = input('Enter Protein: ')
+        try:
+            int_value = int(Protein)
+            break
+        except ValueError:
+            print("Please input a valid number for Protein.")
+
+
+
+
+    df = pd.read_csv('data/meals.csv')
+
+    todays_date = datetime.now().strftime('%Y-%m-%d')
+
+    if todays_date in df['Date'].values:
+        row_index = df.index[df['Date'] == todays_date].tolist()[0]
+
+        if pd.notna(df.at[row_index, mealcalories]):
+            os.system('cls||clear')
+            print(f'{mealcalories} is already input. Would you like to update, add a snack or go back?')
+            print('Enter 1 for Update')
+            print('Enter 2 for Add')
+            print('Enter 3 to go Back')
+
+            userinput = input("Enter your choice: ")
+
+            if userinput == '1':
+                df.at[row_index, mealcalories] = int(Calories)
+            elif userinput == '2':
+                df.at[row_index, mealcalories] =+ int(Calories)
+            elif userinput == '3':
+                pass              
+            else:
+                print('Invalid Input')
+        else:
+            df[mealcalories] = df[mealcalories].fillna(0).astype(int)
+            df.at[row_index, mealcalories] = int(Calories)
+
+        if pd.notna(df.at[row_index, mealprotein]):
+            os.system('cls||clear')
+            print(f'{mealcalories} is already input. Would you like to update, add a snack or go back?')
+            print('Enter 1 for Update')
+            print('Enter 2 for Add')
+            print('Enter 3 to go Back')
+
+            userinput = input("Enter your choice: ")
+
+            if userinput == '1':
+                df.at[row_index, mealprotein] = int(Protein)
+            elif userinput == '2':
+                df.at[row_index, mealprotein] =+ int(Protein)
+            elif userinput == '3':
+                pass
+            else:
+              print('Invalid Input')
+        else:
+            df[mealprotein] = df[mealprotein].fillna(0).astype(int)
+            df.at[row_index, mealprotein] = int(Protein)
+    else:
+        #if the date is not already present in csv create a new row for it
+        new_row = {
+            'Date': todays_date,
+            mealcalories: int(Calories),
+            mealprotein: int(Protein)
+        }
+        df = df._append(new_row, ignore_index=True)
+
+    df['Total Calories'] = (df['Breakfast Calories'].fillna(0) + df['Lunch Calories'].fillna(0) + df['Dinner Calories'].fillna(0) + df['Snack Calories'].fillna(0))
+    df['Total Calories'] = df['Total Calories'].fillna(0).astype(int)
+    
+    df['Total Protein'] = (df['Breakfast Protein'].fillna(0) + df['Lunch Protein'].fillna(0) + df['Dinner Protein'].fillna(0) + df['Snack Protein'].fillna(0))
+    df['Total Protein']  = df['Total Protein'].fillna(0).astype(int)
+
+    #Ensure all edited fields are int and not float
+    df[mealcalories] = df[mealcalories].fillna(0).astype(int)
+    df[mealprotein] = df[mealprotein].fillna(0).astype(int)
+
+    df.to_csv('data/meals.csv', index=False)
+    return
 
 def addmeal():
         print('\nWhich meal Would You like to add?\n')
@@ -139,17 +255,104 @@ def addmeal():
                 os.system('cls||clear')
                 addmeal()           
             if choice == "4":
-                pass
+                addsnack('Snack Calories', 'Snack Protein')
+                os.system('cls||clear')
+                addmeal()
             if choice == "5":
-                pass
+                create_menu()
             else:
                 print('Invalid Choice')
-                addmeal() 
+                addmeal()
 
 
 def delmeal():
+    count = 1
     df = pd.read_csv('data/meals.csv')
+
+    print('\nWhich Day would you like to select?\n')
+
     for date in df['Date'].values:
-        print(date)
+        print(f'Enter {count} for {date}')
+        count += 1
+
+    userinput = int(input("Enter your choice: "))
     
-delmeal()
+
+    if not userinput > count-1 and userinput > 0:
+        os.system('cls||clear')
+        date_chosen = df['Date'].iloc[int(userinput) - 1]
+
+        print('\nWhich Field Would you like to delete?\n')
+
+        
+        print('Enter 1 for Breakfast Calories')
+        print('Enter 2 for Breakfast Protein')
+        print('Enter 3 for Lunch Calories')
+        print('Enter 4 for Lunch Protein')
+        print('Enter 5 for Dinner Calories')
+        print('Enter 6 for Dinner Protein')
+        print('Enter 7 for Snack Calories')
+        print('Enter 8 for Snack Protein')
+        print('Enter 9 for Total Calories')
+        print('Enter 10 for Total Protein')
+
+        choice = input('Enter Choice: ')
+        row_index = df.index[df['Date'] == date_chosen].tolist()[0]
+        if choice == '1':
+            df.at[row_index, 'Breakfast Calories'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Breakfast Calories set to NaN")
+            delmeal()
+        elif choice == '2':
+            df.at[row_index, 'Breakfast Protein'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Breakfast Protein set to NaN")
+            delmeal()
+        elif choice == '3':
+            df.at[row_index, 'Lunch Calories'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Lunch Calories set to NaN")
+            delmeal()
+        elif choice == '4':
+            df.at[row_index, 'Lunch Protein'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Lunch Protein set to NaN")
+            delmeal()
+        elif choice == '5':
+            df.at[row_index, 'Dinner Calories'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Dinner Calories set to NaN")
+            delmeal()
+        elif choice == '6':
+            df.at[row_index, 'Dinner Protein'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Dinner Protein set to NaN")
+            delmeal()
+        elif choice == '7':
+            df.at[row_index, 'Snack Calories'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Snack Calories set to NaN")
+            delmeal()
+        elif choice == '8':
+            df.at[row_index, 'Snack Protein'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Snack Protein set to NaN")
+            delmeal()
+        elif choice == '9':
+            df.at[row_index, 'Total Calories'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Total Calories set to NaN")
+            delmeal()
+        elif choice == '10':
+            df.at[row_index, 'Total Protein'] = np.nan
+            df.to_csv('data/meals.csv', index=False)
+            print("\n'Total Protein set to NaN")
+            delmeal()
+        else:
+            print("Invalid choice")
+    else:
+        print('\nInvalid Input')
+        delmeal()
+
+    
+addmeal()

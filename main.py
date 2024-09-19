@@ -1,23 +1,11 @@
 import os
 from colored import Fore, Back, Style
+from functions.add_meal_functions import addmeal, addmacro, addsnack, create_menu, delmeal
+
 
 print(f"{Fore.green}Welcome to the Macrotrack!{Style.reset}\n")
 
-def create_menu():
-    print("Enter 1 to Add Meal")
-    print("Enter 2 to Delete Meal")
-    print("Enter 3 to List Meal History")
-    print("Enter 4 to Calculate Target Calories")
-    print("Enter 5 to Calculate Target Protien")
-    print("Enter 6 to View Progress")
-    print('Enter 7 to Save and Exit\n')
 
-
-    choice = input("Enter your choice: ")
-
-    print(choice)
-
-    return choice
 
 choice = ""
 
@@ -25,9 +13,11 @@ while choice !=  "7":
     choice = create_menu()
 
     if choice == "1":
-        print('Add Meal')
+        os.system('cls||clear')
+        addmeal()
     elif choice == "2":
-        print('Delete Meal')
+        os.system('cls||clear')
+        delmeal()
     elif choice == "3":
         print('List Meal History')
     elif choice == "4":
