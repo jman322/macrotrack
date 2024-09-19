@@ -1,6 +1,9 @@
 import csv
 import os
 from colored import Fore, Back, Style
+from datetime import datetime
+from time import sleep
+import pandas as pd
 
 def addmacro(mealcalories, mealprotein):
     with open('data/meals.csv', mode='a', newline='') as csvfile:
@@ -22,14 +25,36 @@ def addmacro(mealcalories, mealprotein):
             except ValueError:
                 print("Please input a valid number for Protein.")
 
+
+
+
+    df = pd.read_csv('data/meals.csv')
+
+    todays_date = datetime.now().strftime('%Y-%m-%d')
+    if todays_date in df['Date'].values:
+        row_index = df.index[df['Date'] == todays_date].tolist()[0]
+        df.at[row_index, mealcalories] = Calories
+        df.at[row_index, mealprotein] = Protein
+
+        df.to_csv('data/meals.csv', index=False)
+
+            
+
+
         
-        writer.writerow({f'{mealcalories}': Calories, f'{mealprotein}': Protein})
 
     return
 
 
 
 def addmeal():
+
+
+
+        formatted_date = datetime.now().strftime('%Y-%m-%d')
+
+        print(formatted_date)
+
 
 
 
