@@ -6,11 +6,7 @@ from time import sleep
 import pandas as pd
 
 
-
-
-
-def addmacro(mealcalories, mealprotein):
-
+def filecheck():
     fieldnames = ['Date', 'Breakfast Calories','Breakfast Protein','Lunch Calories','Lunch Protein','Dinner Calories','Dinner Protein','Snack Calories','Snack Protein','Total Caloriees', 'Total Protein']
     file_path = 'data/meals.csv'
 
@@ -31,6 +27,11 @@ def addmacro(mealcalories, mealprotein):
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
 
+
+def addmacro(mealcalories, mealprotein):
+
+
+    filecheck()
 
 
 
@@ -59,7 +60,8 @@ def addmacro(mealcalories, mealprotein):
     if todays_date in df['Date'].values:
         row_index = df.index[df['Date'] == todays_date].tolist()[0]
 
-        if df.at[row_index, mealcalories] != None:
+        if pd.notna(df.at[row_index, mealcalories]):
+            os.system('cls||clear')
             print(f'{mealcalories} is already input. Would you like to update?')
             print('Enter 1 for Yes')
             print('Enter 2 for No')
@@ -72,8 +74,12 @@ def addmacro(mealcalories, mealprotein):
                 df.at[row_index, mealcalories] = int(df.at[row_index, mealcalories])
             else:
                 print('Invalid Input')
+        else:
+            df[mealcalories] = df[mealcalories].fillna(0).astype(int)
+            df.at[row_index, mealcalories] = int(Calories)
 
-        if df.at[row_index, mealprotein] != None:
+        if pd.notna(df.at[row_index, mealprotein]):
+            os.system('cls||clear')
             print(f'{mealprotein} is already input. Would you like to update?')
             print('Enter 1 for Yes')
             print('Enter 2 for No')
@@ -86,7 +92,11 @@ def addmacro(mealcalories, mealprotein):
                 df.at[row_index, mealprotein] = int(df.at[row_index, mealprotein])
             else:
               print('Invalid Input')
+        else:
+            df[mealprotein] = df[mealprotein].fillna(0).astype(int)
+            df.at[row_index, mealprotein] = int(Protein)
     else:
+        #if the date is not already present in csv create a new row for it
         new_row = {
             'Date': todays_date,
             mealcalories: int(Calories),
@@ -96,33 +106,16 @@ def addmacro(mealcalories, mealprotein):
 
 
 
+    #Ensure all edited fields are int and not float
     df[mealcalories] = df[mealcalories].fillna(0).astype(int)
     df[mealprotein] = df[mealprotein].fillna(0).astype(int)
+
     df.to_csv('data/meals.csv', index=False)
- 
-
-
-
-            
-
-
-        
-
     return
 
 
 
 def addmeal():
-
-
-
-        formatted_date = datetime.now().strftime('%Y-%m-%d')
-
-        print(formatted_date)
-
-
-
-
         print('\nWhich meal Would You like to add?\n')
         print('Enter 1 for Breakfast')
         print('Enter 2 for Lunch')
@@ -149,5 +142,14 @@ def addmeal():
                 pass
             if choice == "5":
                 pass
+            else:
+                print('Invalid Choice')
+                addmeal() 
 
-addmeal()
+
+def delmeal():
+    df = pd.read_csv('data/meals.csv')
+    for date in df['Date'].values:
+        print(date)
+    
+delmeal()
