@@ -5,6 +5,10 @@ from datetime import datetime
 from time import sleep
 import pandas as pd
 
+
+
+
+
 def addmacro(mealcalories, mealprotein):
     with open('data/meals.csv', mode='a', newline='') as csvfile:
         fieldnames = ['Date', 'Breakfast Calories','Breakfast Protein','Lunch Calories','Lunch Protein','Dinner Calories','Dinner Protein','Snack Calories','Snack Protein','Total Caloriees', 'Total Protein']
@@ -31,6 +35,7 @@ def addmacro(mealcalories, mealprotein):
     df = pd.read_csv('data/meals.csv')
 
     todays_date = datetime.now().strftime('%Y-%m-%d')
+
     if todays_date in df['Date'].values:
         row_index = df.index[df['Date'] == todays_date].tolist()[0]
 
@@ -60,11 +65,22 @@ def addmacro(mealcalories, mealprotein):
             elif userinput == '2':
                 df.at[row_index, mealprotein] = int(df.at[row_index, mealprotein])
             else:
-                print('Invalid Input')
+              print('Invalid Input')
+    else:
+        new_row = {
+            'Date': todays_date,
+            mealcalories: int(Calories),
+            mealprotein: int(Protein)
+        }
+        df = df._append(new_row, ignore_index=True)
 
-        df[mealcalories] = df[mealcalories].fillna(0).astype(int)
-        df[mealprotein] = df[mealprotein].fillna(0).astype(int)
-        df.to_csv('data/meals.csv', index=False)
+
+
+    df[mealcalories] = df[mealcalories].fillna(0).astype(int)
+    df[mealprotein] = df[mealprotein].fillna(0).astype(int)
+    df.to_csv('data/meals.csv', index=False)
+ 
+
 
 
             
