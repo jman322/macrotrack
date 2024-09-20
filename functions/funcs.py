@@ -6,6 +6,8 @@ from time import sleep
 import pandas as pd
 import numpy as np
 
+
+
 def create_menu():
     os.system('cls||clear')
     print("Enter 1 to Add Meal")
@@ -353,10 +355,64 @@ def delmeal():
     else:
         print('\nInvalid Input')
         delmeal()
-    df['Total Calories'] = (df['Breakfast Calories'].fillna(0) + df['Lunch Calories'].fillna(0) + df['Dinner Calories'].fillna(0) + df['Snack Calories'].fillna(0))
-    df['Total Calories'] = df['Total Calories'].fillna(0).astype(int)
-    
-    df['Total Protein'] = (df['Breakfast Protein'].fillna(0) + df['Lunch Protein'].fillna(0) + df['Dinner Protein'].fillna(0) + df['Snack Protein'].fillna(0))
-    df['Total Protein']  = df['Total Protein'].fillna(0).astype(int)
-    
-delmeal()
+
+def printdf():
+    df = pd.read_csv('data/meals.csv')
+    print(df)
+    userinput = input('Enter 0 to go back: ')
+    if userinput == '0':
+        create_menu()
+    else:
+        print('\nInvalid Input\n')
+        printdf()
+
+
+def calcalc():
+
+    weight = int(input('Enter Weight(kg):'))
+
+    height = int(input('Enter Height(cm): '))
+
+    age = int(input('Enter Age: '))
+
+    print('Enter 1 For Male')
+    print('Enter 2 For Female')
+    gender = int(input('Enter Choice: '))
+
+    if gender == 1:
+        BMR = 10 * weight + 6.25 * height - 5 * age + 5
+    elif gender == 2:
+        BMR = 10 * weight + 6.25 * height - 5 * age - 161
+    else:
+        print('Invalid Choice')
+        calcalc
+   
+    print('\nEnter Activity Level\n')
+    print('Enter 1 for Sedentary: Little to no exercise')
+    print('Enter 2 for Light: Light exercise 1-3 times a week')
+    print('Enter 3 for Moderate: Moderate exercise 4-5 times a week')
+    print('Enter 4 for Active: Daily exercise or intense workouts 3+')
+    print('Enter 5 for Very Active: Intense exercise 6-7 times a week or very physically demanding job')
+    choice = input('Enter Choice: ')
+
+    if choice == '1':
+        TDEE = BMR * 1.2
+    elif choice == '2':
+        TDEE = BMR * 1.375
+    elif choice == '3':
+        TDEE = BMR * 1.55
+    elif choice == '4':
+        TDEE = BMR * 1.725
+    elif choice == '5':
+        TDEE = BMR * 1.9
+    else:
+        print('Invalid choice, using Sedentary as default.')
+        TDEE = BMR * 1.2
+
+
+    print(f"Your Total Daily Energy Expenditure (TDEE) is: {TDEE} calories/day")
+    print(f"For mild weight loss (0.25kg/week) consume {0.9* TDEE}")
+    print(f"For weight loss (0.5kg/week) consume {0.79 * TDEE}")
+    print(f"For mild weight gain (0.25kg/week) consume {1.1 * TDEE}")
+
+calcalc()

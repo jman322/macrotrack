@@ -1,6 +1,6 @@
 import os
 from colored import Fore, Back, Style
-from functions.add_meal_functions import addmeal, addmacro, addsnack, create_menu, delmeal
+from functions.add_meal_functions import addmeal, addmacro, addsnack, create_menu, delmeal, printdf
 
 
 print(f"{Fore.green}Welcome to the Macrotrack!{Style.reset}\n")
@@ -19,7 +19,7 @@ while choice !=  "7":
         os.system('cls||clear')
         delmeal()
     elif choice == "3":
-        print('List Meal History')
+        printdf()
     elif choice == "4":
         print('Calc Target Cals')
     elif choice == "5":
