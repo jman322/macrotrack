@@ -368,16 +368,19 @@ def printdf():
 
 
 def calcalc():
+    while True:
+        try:
+            weight = int(input('Enter Weight(kg): '))
+            height = int(input('Enter Height(cm): '))
+            age = int(input('Enter Age: '))
 
-    weight = int(input('Enter Weight(kg):'))
+            print('Enter 1 for Male')
+            print('Enter 2 for Female')
+            gender = int(input('Enter Choice: '))
 
-    height = int(input('Enter Height(cm): '))
-
-    age = int(input('Enter Age: '))
-
-    print('Enter 1 For Male')
-    print('Enter 2 For Female')
-    gender = int(input('Enter Choice: '))
+            break
+        except ValueError:
+            print("Invalid input. Please enter numbers only.")
 
     if gender == 1:
         BMR = 10 * weight + 6.25 * height - 5 * age + 5
@@ -410,9 +413,11 @@ def calcalc():
         TDEE = BMR * 1.2
 
 
-    print(f"Your Total Daily Energy Expenditure (TDEE) is: {TDEE} calories/day")
-    print(f"For mild weight loss (0.25kg/week) consume {0.9* TDEE}")
-    print(f"For weight loss (0.5kg/week) consume {0.79 * TDEE}")
-    print(f"For mild weight gain (0.25kg/week) consume {1.1 * TDEE}")
+    print(f"\nYour Total Daily Energy Expenditure (TDEE) is: {TDEE:.0f} calories/day\n")
+    print(f"For mild weight loss (0.25kg/week) consume {0.9* TDEE:.0f} calories/day")
+    print(f"For weight loss (0.5kg/week) consume {0.79 * TDEE:.0f} calories/day")
+    print(f"For mild weight gain (0.25kg/week) consume {1.1 * TDEE:.0f} calories/day")
+    print(f"For weight gain (0.5kg/week) consume {1.21 * TDEE:.0f} calories/day")
+    print(f"For fast weight gain (1kg/week) consume {1.41 * TDEE:.0f} calories/day")
 
 calcalc()
