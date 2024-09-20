@@ -353,6 +353,10 @@ def delmeal():
     else:
         print('\nInvalid Input')
         delmeal()
-
+    df['Total Calories'] = (df['Breakfast Calories'].fillna(0) + df['Lunch Calories'].fillna(0) + df['Dinner Calories'].fillna(0) + df['Snack Calories'].fillna(0))
+    df['Total Calories'] = df['Total Calories'].fillna(0).astype(int)
     
-addmeal()
+    df['Total Protein'] = (df['Breakfast Protein'].fillna(0) + df['Lunch Protein'].fillna(0) + df['Dinner Protein'].fillna(0) + df['Snack Protein'].fillna(0))
+    df['Total Protein']  = df['Total Protein'].fillna(0).astype(int)
+    
+delmeal()
