@@ -1,11 +1,11 @@
 import os
 from colored import Fore, Back, Style
-from functions.funcs import addmeal, addmacro, addsnack, create_menu, delmeal, printdf, calcalc
+from functions.funcs import addmeal, addmacro, addsnack, create_menu, delmeal, printdf, calcalc, procalc, comparegoals
 
 
 print(f"{Fore.green}Welcome to the Macrotrack!{Style.reset}\n")
 
-
+create_menu()
 
 choice = ""
 
@@ -25,9 +25,11 @@ while choice !=  "7":
         os.system('cls||clear')
         calcalc
     elif choice == "5":
-        print('Calc Target Pro')
+        os.system('cls||clear')
+        procalc()
     elif choice == "6":
-        print('View Progress')
+        os.system('cls||clear')
+        comparegoals()
     elif choice == "7":
        print('Save and Exit')
     else:

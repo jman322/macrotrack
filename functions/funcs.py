@@ -420,4 +420,58 @@ def calcalc():
     print(f"For weight gain (0.5kg/week) consume {1.21 * TDEE:.0f} calories/day")
     print(f"For fast weight gain (1kg/week) consume {1.41 * TDEE:.0f} calories/day")
 
-calcalc()
+
+
+def procalc():
+    print('The recommended daily intake of protien is 50g a day but for optimal muscle growth you should consume roughly 1.8g per kg of body weight')
+
+    while True:
+        try:
+            bodyweight = int(input('Enter body weight: '))
+
+            break
+        except ValueError:
+            print("Invalid input. Please enter numbers only.")
+
+    print(f'Target protein intake: {bodyweight * 1.8}g of protein per day.')
+
+def comparegoals():
+
+    df = pd.read_csv('data/meals.csv')
+    df['Total Calories'] = (df['Breakfast Calories'].fillna(0) + df['Lunch Calories'].fillna(0) + df['Dinner Calories'].fillna(0) + df['Snack Calories'].fillna(0))
+    df['Total Calories'] = df['Total Calories'].fillna(0).astype(int)
+    
+    df['Total Protein'] = (df['Breakfast Protein'].fillna(0) + df['Lunch Protein'].fillna(0) + df['Dinner Protein'].fillna(0) + df['Snack Protein'].fillna(0))
+    df['Total Protein']  = df['Total Protein'].fillna(0).astype(int)
+    df.to_csv('data/meals.csv', index=False)
+
+    print("Enter 1 to compare Total Calories")
+    print("Enter 2 to compare Total Protein")
+    choice = input("Enter your choice: ")
+
+    if choice not in ['1', '2']:
+        print("Invalid choice. Returning to menu.")
+        return
+    
+    try:
+        user_goal = int(input("Enter your target value to compare: "))
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+        return
+    
+    if choice == '1':
+        print("\nComparing against Total Calories")
+        for index, row in df.iterrows():
+            if row['Total Calories'] >= user_goal:
+                print(f"{row['Date']}: {row['Total Calories']} (met or exceeded target)")
+            else:
+                print(f"{row['Date']}: {row['Total Calories']} (below target)")
+
+    elif choice == '2':
+        print("\nComparing against Total Protein")
+        for index, row in df.iterrows():
+            if row['Total Protein'] >= user_goal:
+                print(f"{row['Date']}: {row['Total Protein']} (met or exceeded target)")
+            else:
+                print(f"{row['Date']}: {row['Total Protein']} (below target)")
+
