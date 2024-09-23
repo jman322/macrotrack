@@ -5,11 +5,9 @@ from functions.funcs import addmeal, addmacro, addsnack, create_menu, delmeal, p
 
 print(f"{Fore.green}Welcome to the Macrotrack!{Style.reset}\n")
 
-create_menu()
-
 choice = ""
 
-while choice !=  "7":
+while choice != "7":
     choice = create_menu()
 
     if choice == "1":
@@ -31,7 +29,7 @@ while choice !=  "7":
         os.system('cls||clear')
         comparegoals()
     elif choice == "7":
-       print('Save and Exit')
+        print('Save and Exit')
     else:
         print("invalid choice")
 
