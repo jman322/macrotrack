@@ -170,3 +170,35 @@ class MealManager:
         if userinput != '0':
             print('\nInvalid Input\n')
             self.print_meal_history()
+            
+    def compare_goals(self):
+        df = self.file_manager.read_file()  # Read data from CSV using FileManager
+        self.recalculate_totals(df)
+
+        print("Enter 1 to compare Total Calories")
+        print("Enter 2 to compare Total Protein")
+        choice = input("Enter your choice: ")
+
+        if choice not in ['1', '2']:
+            print("Invalid choice. Returning to menu.")
+            return
+
+        try:
+            user_goal = int(input("Enter your target value to compare: "))
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+            return
+
+        if choice == '1':
+            self.compare_metric(df, 'Total Calories', user_goal)
+        elif choice == '2':
+            self.compare_metric(df, 'Total Protein', user_goal)
+            
+    def compare_metric(self, df, metric, user_goal):
+        print(f"\nComparing against {metric}")
+        for index, row in df.iterrows():
+            if row[metric] >= user_goal:
+                print(f"{row['Date']}: {row[metric]} (met or exceeded target)")
+            else:
+                print(f"{row['Date']}: {row[metric]} (below target)")
+        input('Enter anything to exit.')

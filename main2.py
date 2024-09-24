@@ -7,7 +7,7 @@ import os
 
 import os
 from datetime import datetime
-
+os.system('cls||clear')
 fieldnames = [
     'Date',
     'Breakfast Calories',
@@ -28,21 +28,44 @@ file_manager.validate_file()
 
 meal_manager = MealManager(file_manager)
 def calculate_tdee():
-    weight = int(input('Enter Weight(kg): '))
-    height = int(input('Enter Height(cm): '))
-    age = int(input('Enter Age: '))
+    while True:
+        try:
+            weight = int(input('Enter Weight(kg): '))
+            height = int(input('Enter Height(cm): '))
+            age = int(input('Enter Age: '))
+            break
+        except ValueError:
+            print('Invalid Input. Please input number')
     
-    print('Enter 1 for Male')
-    print('Enter 2 for Female')
-    gender = int(input('Enter Choice: '))
+    while True:
+        try:
+            print('Enter 1 for Male')
+            print('Enter 2 for Female')
+            gender = int(input('Enter Choice: '))
+            if gender not in [1, 2]:
+                raise ValueError
+            break
+        except ValueError:
+            print('Invalid Input. Please input number')
+    
 
     calculator = Calculator(weight, height, age, gender)
     tdee = calculator.calculate_tdee()
     calculator.display_tdee_results(tdee)
     input('Enter anything to return to main menu: ')
     
+def compare_goals(meal_manager):
+    meal_manager.compare_goals()
+    
 def calculate_protein():
-    bodyweight = int(input('Enter body weight (kg): '))
+    while True:
+        try:
+            bodyweight = int(input('Enter body weight (kg): '))
+            break
+        except ValueError:
+            print('Invalid Input. Please input number')
+            
+            
     Calculator.calculate_protein(bodyweight)
     input('Enter anything to return to main menu: ')
     
@@ -80,8 +103,8 @@ menu_options = {
     3: ("List Meal History", print_meal_history),
     4: ("Calculate Target Calories", lambda: calculate_tdee()),
     5: ("Calculate Target Protein", lambda: calculate_protein()),
-    6: ("View Progress", addmeal),
-    7: ("Save and Exit", addmeal)
+    6: ("View Progress", compare_goals),
+    7: ("Exit", lambda: exit())
 }
 menu = Menu(menu_options)
 while True:

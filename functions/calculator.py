@@ -39,7 +39,16 @@ class Calculator:
         print('Enter 3 for Moderate: Moderate exercise 4-5 times a week')
         print('Enter 4 for Active: Daily exercise or intense workouts 3+')
         print('Enter 5 for Very Active: Intense exercise 6-7 times a week or very physically demanding job')
-        return int(input('Enter Choice: '))
+        while True:
+            try:
+                choice = int(input('Enter Choice: '))
+                if choice not in [1,2,3,4,5]:
+                    raise ValueError
+                else:
+                    return choice
+            except ValueError:
+                print('Invalid Input. Please input valid number')
+                
     
     def display_tdee_results(self, TDEE):
         print(f"\nYour Total Daily Energy Expenditure (TDEE) is: {TDEE:.0f} calories/day\n")

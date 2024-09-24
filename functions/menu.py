@@ -8,12 +8,19 @@ class Menu:
         
     
     def display(self):
-        os.system('cls||clear')
         for key, option in self.options.items():
             print(f"{key}. {option[0]}")
             
     def get_user_choice(self, meal_manager=None):
-        choice = int(input("Enter your choice: "))
+        
+        while True:
+            try:
+                choice = int(input("Enter your choice: "))
+                break
+            except ValueError:
+                os.system('cls||clear')
+                print('Invalid input. Please input a number.')
+                return
         if choice in self.options:
             # Check if the function requires 'meal_manager'
             func = self.options[choice][1]
@@ -22,6 +29,7 @@ class Menu:
             else:
                 func()  # No arguments needed
         else:
+            os.system('cls||clear')
             print("Invalid choice.")
             
 
