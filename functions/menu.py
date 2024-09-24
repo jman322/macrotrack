@@ -5,14 +5,13 @@ from functions import meal_manager
 class Menu:
     def __init__(self, options):
         self.options = options
-        
-    
+
     def display(self):
         for key, option in self.options.items():
             print(f"{key}. {option[0]}")
-            
+
     def get_user_choice(self, meal_manager=None):
-        
+
         while True:
             try:
                 choice = int(input("Enter your choice: "))
@@ -31,5 +30,3 @@ class Menu:
         else:
             os.system('cls||clear')
             print("Invalid choice.")
-            
-
