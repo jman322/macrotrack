@@ -1,5 +1,6 @@
 import csv
 import os
+import pandas as pd
 
 class FileManager:
     def __init__(self, file_path, fieldnames):
@@ -24,12 +25,7 @@ class FileManager:
             self.create_file()
             
     def read_file(self):
-        with open(self.file_path, mode='r', newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            return list(reader)
+        return pd.read_csv(self.file_path)
         
-    def write_file(self, data):
-        with open(self.file_path, mode='w', newline='') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
-            writer.writeheader()
-            writer.writerows(data)
+    def write_file(self, df):
+        df.to_csv(self.file_path, index=False)
