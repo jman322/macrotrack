@@ -117,3 +117,56 @@ class MealManager:
             df['Snack Protein'].fillna(0).astype(float)
         ).astype(int)
         return df
+    
+    def delete_meal(self):
+        df = self.file_manager.read_file()
+
+        print('\nWhich Day would you like to select?\n')
+        for idx, date in enumerate(df['Date'].values, 1):
+            print(f'Enter {idx} for {date}')
+
+        userinput = int(input("Enter your choice: "))
+        if userinput < 1 or userinput > len(df['Date'].values):
+            print("Invalid input. Please try again.")
+            return
+
+        date_chosen = df['Date'].iloc[userinput - 1]
+        row_index = df.index[df['Date'] == date_chosen].tolist()[0]
+
+       
+        fields = {
+            '1': 'Breakfast Calories',
+            '2': 'Breakfast Protein',
+            '3': 'Lunch Calories',
+            '4': 'Lunch Protein',
+            '5': 'Dinner Calories',
+            '6': 'Dinner Protein',
+            '7': 'Snack Calories',
+            '8': 'Snack Protein',
+        }
+
+        print('\nWhich Field Would you like to delete?\n')
+        for key, field in fields.items():
+            print(f'Enter {key} for {field}')
+
+        choice = input('Enter Choice: ')
+        if choice in fields:
+            self._set_field_to_nan(df, row_index, fields[choice])
+        else:
+            print("Invalid choice.")
+
+        df = self.recalculate_totals(df)
+        self.file_manager.write_file(df)
+
+    def _set_field_to_nan(self, df, row_index, field_name):
+        df.at[row_index, field_name] = pd.NA 
+        print(f"\n'{field_name}' set to NaN")
+        
+    def print_meal_history(self):
+        df = self.file_manager.read_file()
+        print(df)
+        
+        userinput = input('Enter 0 to go back: ')
+        if userinput != '0':
+            print('\nInvalid Input\n')
+            self.print_meal_history()
