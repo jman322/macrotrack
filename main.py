@@ -3,11 +3,12 @@ from functions.file_manager import FileManager
 from functions.meal_manager import MealManager
 from functions.calculator import Calculator
 import os
+from colorama import Fore, Style
 
 
-import os
 from datetime import datetime
 os.system('cls||clear')
+print(Fore.CYAN)
 fieldnames = [
     'Date',
     'Breakfast Calories',
@@ -32,7 +33,10 @@ meal_manager = MealManager(file_manager)
 def calculate_tdee():
     while True:
         try:
+            print('Enter 0 to return')
             weight = int(input('Enter Weight(kg): '))
+            if weight == 0:
+                return
             height = int(input('Enter Height(cm): '))
             age = int(input('Enter Age: '))
             break
@@ -63,7 +67,10 @@ def compare_goals(meal_manager):
 def calculate_protein():
     while True:
         try:
+            print('Enter 0 to return')
             bodyweight = int(input('Enter body weight (kg): '))
+            if bodyweight == 0:
+                return
             break
         except ValueError:
             print('Invalid Input. Please input number')
@@ -73,7 +80,8 @@ def calculate_protein():
 
 
 def addmeal(meal_manager):
-    os.system('cls')
+    os.system('cls||clear')
+    
     meal_options = {
         "1": {
             "type": "breakfast",

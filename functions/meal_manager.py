@@ -1,13 +1,14 @@
 from functions import file_manager
 from datetime import datetime
 import pandas as pd
-
+import os
 
 class MealManager:
     def __init__(self, file_manager):
         self.file_manager = file_manager
 
     def add_meal(self, meal_type, mealcalories, mealprotein):
+        os.system('cls||clear')
         self.file_manager.check_file()
 
         calories = self.get_user_input("Calories")
@@ -39,6 +40,7 @@ class MealManager:
                 calories,
                 protein)
 
+        os.system('cls||clear')
         df = self.recalculate_totals(df)
         self.file_manager.write_file(df)
 
@@ -114,6 +116,7 @@ class MealManager:
                 if update_protein == 'y':
                     df.at[row_index, mealprotein] = protein
 
+
         return df
 
     def add_new_meal(
@@ -134,7 +137,6 @@ class MealManager:
 
         new_row_df = pd.DataFrame([new_row])
         df = pd.concat([df, new_row_df], ignore_index=True)
-
         return df
 
     def recalculate_totals(self, df):
@@ -156,14 +158,24 @@ class MealManager:
     def delete_meal(self):
         df = self.file_manager.read_file()
 
-        print('\nWhich Day would you like to select?\n')
-        for idx, date in enumerate(df['Date'].values, 1):
-            print(f'Enter {idx} for {date}')
+        while True:  # This loop will keep asking for input until valid
+            print('\nWhich Day would you like to select?')
+            print('Enter 0 to return to main menu\n')
+            for idx, date in enumerate(df['Date'].values, 1):
+                print(f'Enter {idx} for {date}')
 
-        userinput = int(input("Enter your choice: "))
-        if userinput < 1 or userinput > len(df['Date'].values):
-            print("Invalid input. Please try again.")
-            return
+            try:
+                userinput = int(input("Enter your choice: "))
+                if 1 <= userinput <= len(df['Date'].values):
+                    break  # Break the loop if the input is valid
+                elif userinput == 0:
+                    return
+                else:
+                    os.system('cls||clear')
+                    print("Invalid input. Please try again.")
+            except ValueError:
+                os.system('cls||clear')
+                print("Invalid input. Please enter a number.")
 
         date_chosen = df['Date'].iloc[userinput - 1]
         row_index = df.index[df['Date'] == date_chosen].tolist()[0]
@@ -183,45 +195,52 @@ class MealManager:
         for key, field in fields.items():
             print(f'Enter {key} for {field}')
 
-        choice = input('Enter Choice: ')
-        if choice in fields:
-            self._set_field_to_nan(df, row_index, fields[choice])
-        else:
-            print("Invalid choice.")
+        while True:
+                choice = input('Enter Choice: ')
+                if choice in fields:
+                    self._set_field_to_nan(df, row_index, fields[choice])
+                    break
+                else:
+                    print("Invalid choice. Please try again.")
 
         df = self.recalculate_totals(df)
         self.file_manager.write_file(df)
 
     def _set_field_to_nan(self, df, row_index, field_name):
         df.at[row_index, field_name] = pd.NA
+        os.system('cls||clear')
         print(f"\n'{field_name}' set to NaN")
 
     def print_meal_history(self):
         df = self.file_manager.read_file()
         print(df)
 
-        userinput = input('Enter 0 to go back: ')
-        if userinput != '0':
-            print('\nInvalid Input\n')
-            self.print_meal_history()
+        userinput = input('Enter anything to go back: ')
+
 
     def compare_goals(self):
-        df = self.file_manager.read_file()  # Read data from CSV using FileManager
+        df = self.file_manager.read_file()
         self.recalculate_totals(df)
 
-        print("Enter 1 to compare Total Calories")
-        print("Enter 2 to compare Total Protein")
-        choice = input("Enter your choice: ")
+        while True:
+            print('Enter 0 to return')
+            print("Enter 1 to compare Total Calories")
+            print("Enter 2 to compare Total Protein")
+            choice = input("Enter your choice: ")
 
-        if choice not in ['1', '2']:
-            print("Invalid choice. Returning to menu.")
-            return
+            if choice in ['1', '2']:
+                break
+            elif choice == '0':
+                return
+            else:
+                print("Invalid choice. Please enter 1 or 2.")
 
-        try:
-            user_goal = int(input("Enter your target value to compare: "))
-        except ValueError:
-            print("Invalid input. Please enter a valid number.")
-            return
+        while True:
+            try:
+                user_goal = int(input("Enter your target value to compare: "))
+                break
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
 
         if choice == '1':
             self.compare_metric(df, 'Total Calories', user_goal)
