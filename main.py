@@ -4,11 +4,11 @@ from functions.meal_manager import MealManager
 from functions.calculator import Calculator
 import os
 from colorama import Fore, Style
-
-
 from datetime import datetime
+
 os.system('cls||clear')
 print(Fore.CYAN)
+
 fieldnames = [
     'Date',
     'Breakfast Calories',
@@ -22,6 +22,7 @@ fieldnames = [
     'Total Calories',
     'Total Protein'
 ]
+
 file_path = 'data/meals.csv'
 file_manager = FileManager('data/meals.csv', fieldnames)
 file_manager.check_file()
@@ -29,19 +30,18 @@ file_manager.validate_file()
 
 meal_manager = MealManager(file_manager)
 
-
 def calculate_tdee():
     while True:
         try:
             print('Enter 0 to return')
             weight = int(input('Enter Weight(kg): '))
             if weight == 0:
-                return
+                return  # Exits the function if user inputs 0
             height = int(input('Enter Height(cm): '))
             age = int(input('Enter Age: '))
             break
         except ValueError:
-            print('Invalid Input. Please input number')
+            print('Invalid Input. Please input a number')
 
     while True:
         try:
@@ -49,20 +49,19 @@ def calculate_tdee():
             print('Enter 2 for Female')
             gender = int(input('Enter Choice: '))
             if gender not in [1, 2]:
-                raise ValueError
+                raise ValueError  # Forces user to input a valid gender
             break
         except ValueError:
-            print('Invalid Input. Please input number')
+            print('Invalid Input. Please input a number')
 
+    # Calculator instance handles the TDEE calculation and display
     calculator = Calculator(weight, height, age, gender)
     tdee = calculator.calculate_tdee()
     calculator.display_tdee_results(tdee)
     input('Enter anything to return to main menu: ')
 
-
 def compare_goals(meal_manager):
     meal_manager.compare_goals()
-
 
 def calculate_protein():
     while True:
@@ -70,18 +69,17 @@ def calculate_protein():
             print('Enter 0 to return')
             bodyweight = int(input('Enter body weight (kg): '))
             if bodyweight == 0:
-                return
+                return  # Exits the function if user inputs 0
             break
         except ValueError:
-            print('Invalid Input. Please input number')
+            print('Invalid Input. Please input a number')
 
     Calculator.calculate_protein(bodyweight)
     input('Enter anything to return to main menu: ')
 
-
 def addmeal(meal_manager):
     os.system('cls||clear')
-    
+
     meal_options = {
         "1": {
             "type": "breakfast",
@@ -97,7 +95,7 @@ def addmeal(meal_manager):
             "protein": "Dinner Protein"},
         "4": {
             "type": "snack",
-                    "calories": "Snack Calories",
+            "calories": "Snack Calories",
             "protein": "Snack Protein"}}
 
     print('\nWhich meal would you like to add?\n')
@@ -113,20 +111,18 @@ def addmeal(meal_manager):
             meal_options[choice]['calories'],
             meal_options[choice]['protein'])
         return
-    elif choice == "5":
+    elif choice == "5":  # Go back to the main menu
         return
     else:
         print('Invalid Choice')
-        addmeal(meal_manager)
-
+        addmeal(meal_manager)  # keep asking again if the choice is invalid
 
 def print_meal_history(meal_manager):
     meal_manager.print_meal_history()
 
-
-def deletemeal(mealmannager):
+s
+def deletemeal(mealmanager):
     meal_manager.delete_meal()
-
 
 menu_options = {
     1: ("Add Meal", addmeal),
@@ -137,12 +133,12 @@ menu_options = {
     6: ("View Progress", compare_goals),
     7: ("Exit", lambda: exit())
 }
+
 menu = Menu(menu_options)
 while True:
     menu.display()
     user_choice = menu.get_user_choice(meal_manager)
 
-    # You may want to break the loop if user_choice is "Exit"
     if user_choice == 7:
         print("Exiting the program...")
         break
